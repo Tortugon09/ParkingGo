@@ -19,7 +19,7 @@ func NewParkingSpace(x, y, x2, y2 float64, row, number int) *ParkingSpace {
 
 	return &ParkingSpace{
 		Area:             &area,
-		ParkingDirections: parkingDirections,
+		ParkingDirections: parkingDirections,       
 		ExitDirections:    exitDirections,
 		Number:           number,
 		Available:        true,

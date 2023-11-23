@@ -2,15 +2,17 @@ package scenes
 
 import (
 	"estacionamiento/models"
-	"github.com/oakmound/oak/v4"
-	"github.com/oakmound/oak/v4/alg/floatgeom"
-	"github.com/oakmound/oak/v4/entities"
-	"github.com/oakmound/oak/v4/event"
-	"github.com/oakmound/oak/v4/scene"
 	"image/color"
 	"math/rand"
 	"sync"
 	"time"
+
+	"github.com/oakmound/oak/v4"
+	"github.com/oakmound/oak/v4/alg/floatgeom"
+	"github.com/oakmound/oak/v4/entities"
+	"github.com/oakmound/oak/v4/event"
+	"github.com/oakmound/oak/v4/render"
+	"github.com/oakmound/oak/v4/scene"
 )
 
 var (
@@ -39,10 +41,10 @@ var (
 		models.NewParkingSpace(140, 345, 170, 375, 4, 19),
 		models.NewParkingSpace(140, 390, 170, 420, 4, 20),
 	}
-	estacionamiento   = models.NewParkingLot(ParkingSpaces)
-	colaAutomoviles   = estacionamiento.GetCarQueue()
-	doorMutex         sync.Mutex
-	carManager        = models.NewCarController()
+	estacionamiento = models.NewParkingLot(ParkingSpaces)
+	colaAutomoviles = estacionamiento.GetCarQueue()
+	doorMutex       sync.Mutex
+	carManager      = models.NewCarController()
 )
 
 type ParkingScene struct{}
@@ -83,7 +85,9 @@ func PrepareScene(ctx *scene.Context) {
 	entities.New(ctx, entities.WithRect(parkingLotArea), entities.WithColor(color.RGBA{128, 128, 128, 128}))
 
 	for _, parkingSpace := range ParkingSpaces {
-		entities.New(ctx, entities.WithRect(*parkingSpace.GetArea()), entities.WithColor(color.RGBA{220, 220, 220, 1}))
+		spritePath := "assets/Parking.jpg"
+		sprite, _ := render.LoadSprite(spritePath)
+		entities.New(ctx, entities.WithRect(*parkingSpace.GetArea()), entities.WithRenderable(sprite))
 	}
 }
 
